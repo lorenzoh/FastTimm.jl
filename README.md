@@ -4,8 +4,6 @@
 
 Use timm ([pytorch-image-models](https://github.com/rwightman/pytorch-image-models)) with FastAI.jl. FastTimm.jl integrates timm, the comprehensive library of pretrained computer vision models implemented in PyTorch with FastAI.jl. It allows you to load any timm model and train it using Julia packages.
 
-Using timm models in Julia, 
-
 To install FastTimm.jl, run the following in your Julia REPL:
 
 ```julia
@@ -31,8 +29,7 @@ To train a timm model, you need to
 ```julia
 data, blocks = load(datarecipes()["imagenette2-320"])
 task = ImageClassificationSingle(blocks)
-
 model = load(models()["timm/resnet18"], input=task.blocks.x, output=task.blocks.y)
-
-
+learner = tasklearner(task, data; model=model, callbacks=[ToPyTorch("cuda")])
+fitonecycle!(learner, 10)
 ```
